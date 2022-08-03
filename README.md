@@ -17,7 +17,7 @@ You can also change the user and password, in that case make sure to match the o
 
 ### GraphDB
 
-The Corda node communicate with an instance of GraphDB. In default configuration it is assumed that GraphDB and the Corda node are running in the same network (in this case the virtual one created by docker). Should that not be the case, you can configure GraphDB location editing `database.properties`.
+The Corda node communicates with an instance of GraphDB. In the default configuration it is assumed that GraphDB and the Corda node are running in the same network (in this case the virtual one created by docker). Should that not be the case, you can configure GraphDB's location by editing `database.properties`.
 
 ## Registration to the Network
 
@@ -31,7 +31,7 @@ docker compose --profile registration up
 
 Once the process ends successfully, the node is registered to the network and new certificates are created.
 
-You can see the network-map service at:  
+After starting your node, you can see the network-map service at:  
 https://nms.basicdatasharinginfrastructure.net/
 
 ## Run the BDI Node
