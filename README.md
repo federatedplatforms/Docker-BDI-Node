@@ -39,3 +39,19 @@ https://nms.basicdatasharinginfrastructure.net/
 ```
 docker compose --profile run up
 ```
+
+Once all the three components are up and running you need to set up the GraphDB repository.
+
+### Set up GraphDB
+
+You can load the ontologies by running the following commands:
+
+1. Navigate to http://\<server>:7200
+2. Setup -> Repository -> New free repository
+3. Provide a name, put this name in database.properties. The default is bdi.
+4. Tick the box to "Enable SHACL validation"
+5. Create
+6. (Optional) click the thumb-tack icon to set the new repository as the default and run it
+7. Create a zip of the ttl in [this repository](https://github.com/silenroc1/FEDeRATED-copy)
+8. Import -> RDF -> Upload the ontology ttl zip
+9. Upload file userEvent.shapes.ttl. Target graph, named graph: `http://rdf4j.org/schema/rdf4j#SHACLShapeGraph`
