@@ -60,7 +60,7 @@ services:
       - './graphdb-data:/opt/graphdb/data'
     ports:
       - '7200:7200'
-    image: 'khaller/graphdb-free:9.8.0'
+    image: 'khaller/graphdb-free:10.0.0'
     container_name: graphdb
     profiles:
       - run
