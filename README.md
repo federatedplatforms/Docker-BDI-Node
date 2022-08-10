@@ -52,9 +52,10 @@ You can load the ontologies by running the following commands:
 4. Tick the box to "Enable SHACL validation"
 5. Create
 6. (Optional) click the thumb-tack icon to set the new repository as the default and run it
-7. Create a zip of the ttl in [this repository](https://github.com/silenroc1/FEDeRATED-copy)
-8. Import -> RDF -> Upload the ontology ttl zip
-9. Upload file userEvent.shapes.ttl. Target graph, named graph: `http://rdf4j.org/schema/rdf4j#SHACLShapeGraph`
+7. Download a zip file with the ontology from [here](https://nightly.link/silenroc1/FEDeRATED-Semantic-Model/workflows/CreateArchive/master/federated-ontologies)
+8. Import -> RDF -> Upload the ontology zip
+9. Download the zip file for the SHACL from [here](https://nightly.link/silenroc1/FEDeRATED-Semantic-Model/workflows/shaclArchive/master/federated-shacl).
+10. Import -> RDF -> Upload the shacl zip. Target graph, named graph: `http://rdf4j.org/schema/rdf4j#SHACLShapeGraph`
 
 ## Sample Call
 
