@@ -47,6 +47,7 @@ services:
       - corda
     image: 'andreasdog/corda-client-springboot:0.1.0'
     container_name: spring-API
+    command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar clients.jar"
     profiles:
       - run
     # volumes:
@@ -60,7 +61,7 @@ services:
       - './graphdb-data:/opt/graphdb/data'
     ports:
       - '7200:7200'
-    image: 'khaller/graphdb-free:9.8.0'
+    image: 'khaller/graphdb-free:10.0.0'
     container_name: graphdb
     profiles:
       - run
