@@ -23,6 +23,7 @@ services:
       - './node.conf:/etc/corda/node.conf'
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
+      - './persistence:/opt/corda/persistence'
       - './database.properties:/opt/corda/database.properties'
     ports:
       - '10006:10006'
