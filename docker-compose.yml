@@ -23,6 +23,7 @@ services:
       - './node.conf:/etc/corda/node.conf'
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
+      - './persistence:/opt/corda/persistence'
       - './database.properties:/opt/corda/database.properties'
     ports:
       - '10006:10006'
@@ -45,7 +46,7 @@ services:
       - '10050:10050'
     depends_on:
       - corda
-    image: 'tystnad/corda-client-springboot:0.1.6'
+    image: 'tystnad/corda-client-springboot:0.1.8'
     container_name: spring-API
     command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar clients.jar"
     profiles:
@@ -71,7 +72,7 @@ services:
   semanticadapter:
     ports:
       - '1337:1337'
-    image: 'tystnad/semantic-adapter:tl-0.1'
+    image: 'tystnad/semantic-adapter:tl-0.4'
     container_name: semanticadapter
     profiles:
       - run

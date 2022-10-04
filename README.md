@@ -8,6 +8,7 @@ The BDI node is composed by the following components:
   - Corda node
   - Spring-Boot API
   - GraphDB database
+  - Semantic adapter
 
 ### Node Identity
 
@@ -33,7 +34,7 @@ docker compose --profile registration up
 Once the process ends successfully, the node is registered to the network and new certificates are created.
 
 After starting your node, you can see the network-map service at:  
-https://nms.basicdatasharinginfrastructure.net/
+https://nms.k8s.basicdatasharinginfrastructure.net/
 
 ## Run the BDI Node
 
@@ -57,6 +58,8 @@ You can load the ontologies by running the following commands:
 8. Import -> RDF -> Upload the ontology zip
 9. Download the zip file for the SHACL from [here](https://nightly.link/Federated-BDI/FEDeRATED-Semantic-Model/workflows/shaclArchive/master/federated-shacl).
 10. Import -> RDF -> Upload the shacl zip. Target graph, named graph: `http://rdf4j.org/schema/rdf4j#SHACLShapeGraph`
+
+Step 4, 9 and 10 are optional, to make use of the SHACL validation to make sure added data fits the restraints specified.
 
 ## Sample Call
 
