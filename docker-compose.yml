@@ -12,6 +12,7 @@ services:
       - '10005:10005'
     container_name: corda-BDI-node-registration
     image: 'tystnad/corda-zulu-java1.8-4.5.8'
+    user: root
     profiles:
       - registration
     networks:
@@ -30,6 +31,7 @@ services:
       - '10005:10005'
     container_name: corda-BDI-node
     image: 'tystnad/corda-zulu-java1.8-4.5.8'
+    user: root
     profiles:
       - run
     networks:
