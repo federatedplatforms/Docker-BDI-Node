@@ -11,7 +11,7 @@ services:
       - '10006:10006'
       - '10005:10005'
     container_name: corda-BDI-node-registration
-    image: 'tystnad/corda-zulu-java1.8-4.5.8'
+    image: 'corda/community:4.9.2-zulu-openjdk8'
     user: root
     profiles:
       - registration
@@ -30,7 +30,7 @@ services:
       - '10006:10006'
       - '10005:10005'
     container_name: corda-BDI-node
-    image: 'tystnad/corda-zulu-java1.8-4.5.8'
+    image: 'corda/community:4.9.2-zulu-openjdk8'
     user: root
     profiles:
       - run
@@ -48,9 +48,9 @@ services:
       - '10050:10050'
     depends_on:
       - corda
-    image: 'tystnad/corda-client-springboot:0.1.8'
+    image: 'drew3110/spring-boot:0.1.10'
     container_name: spring-API
-    command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar clients.jar"
+    command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar api.jar"
     profiles:
       - run
     volumes:
@@ -74,7 +74,7 @@ services:
   semanticadapter:
     ports:
       - '1337:1337'
-    image: 'tystnad/semantic-adapter:tl-0.4'
+    image: 'tystnad/semantic-adapter:tl-0.5'
     container_name: semanticadapter
     profiles:
       - run
