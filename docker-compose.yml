@@ -43,7 +43,7 @@ services:
   corda:
     volumes:
       - './certificates:/opt/corda/certificates'
-      - './node.conf:/opt/corda/node.conf'
+      - './node.conf:/etc/corda/node.conf'
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
