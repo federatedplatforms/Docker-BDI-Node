@@ -17,11 +17,33 @@ services:
       - registration
     networks:
       - BDI-node-net
-      
-  corda:
+
+
+  corda-database-migration:
+    environment:
+      CORDA_ARGS: run-migration-scripts --core-schemas --allow-hibernate-to-manage-app-schema --config-file=/etc/corda/node.conf
     volumes:
       - './certificates:/opt/corda/certificates'
       - './node.conf:/etc/corda/node.conf'
+      - './network-truststore.jks:/tmp/network-truststore.jks'
+      - './cordapps:/opt/corda/cordapps'
+      - './persistence:/opt/corda/persistence'
+      - './database.properties:/opt/corda/database.properties'
+    ports:
+      - '10006:10006'
+      - '10005:10005'
+    container_name: corda-BDI-node-migration
+    image: 'corda/community:4.9.2-zulu-openjdk8'
+    user: root
+    profiles:
+      - db
+    networks:
+      - BDI-node-net
+
+  corda:
+    volumes:
+      - './certificates:/opt/corda/certificates'
+      - './node.conf:/opt/corda/node.conf'
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
