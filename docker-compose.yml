@@ -70,7 +70,7 @@ services:
       - '10050:10050'
     depends_on:
       - corda
-    image: 'drew3110/spring-boot:0.1.10'
+    image: 'drew3110/spring-boot:0.1.11'
     container_name: spring-API
     command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar api.jar"
     profiles:
