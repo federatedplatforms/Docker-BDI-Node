@@ -48,6 +48,7 @@ services:
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
       - './database.properties:/opt/corda/database.properties'
+      - './ishare.properties:/opt/corda/ishare.properties'
     ports:
       - '10006:10006'
       - '10005:10005'
@@ -70,13 +71,11 @@ services:
       - '10050:10050'
     depends_on:
       - corda
-    image: 'drew3110/spring-boot:0.1.11'
-    container_name: spring-API
-    command: /bin/bash -c "sleep 40 && java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar api.jar"
+    image: 'chirvasutatc/bdi-api:0.1'
+    container_name: bdi-api
+    command: /bin/bash -c "java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar api.jar"
     profiles:
       - run
-    volumes:
-      - './database.properties:/database.properties'
     networks:
       - BDI-node-net
     restart: on-failure
