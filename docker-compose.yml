@@ -93,15 +93,5 @@ services:
     networks:
       - BDI-node-net
 
-  semanticadapter:
-    ports:
-      - '1337:1337'
-    image: 'tystnad/semantic-adapter:tl-0.5'
-    container_name: semanticadapter
-    profiles:
-      - run
-    networks:
-      - BDI-node-net
-
 networks:
   BDI-node-net: {}
