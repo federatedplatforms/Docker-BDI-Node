@@ -41,6 +41,8 @@ services:
       - BDI-node-net
 
   corda:
+    environment:
+      triplestoreHost: "graphdb"
     volumes:
       - './certificates:/opt/corda/certificates'
       - './node.conf:/etc/corda/node.conf'
