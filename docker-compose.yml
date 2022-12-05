@@ -47,7 +47,6 @@ services:
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
-      - './database.properties:/opt/corda/database.properties'
       - './ishare.properties:/opt/corda/ishare.properties'
     ports:
       - '10006:10006'
