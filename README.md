@@ -7,20 +7,22 @@ This repository contains the necessary files to configure a BDI node and run it 
 The BDI node is composed by the following components:
   
   - Corda node
-  - API
-  - Semantic adapter
+  - BDI API (includes the semantic adapter)
   - GraphDB
+
+All the container properties are specified in the docker compose [.env](.env) file.
 
 ### Node Identity
 
-You can configure the identity of the Corda node through the `node.conf` file. You can change the name and location of the organization, and you must set the host name or IP address of the node. 
+You can configure the identity of the Corda node through the [node.conf](corda/node.conf) file. You can change the name and location of the organization, and you must set the host name or IP address of the node. 
 Note that for testing purposes, it is useful to pick a unique country code. The country code does not have to correspond to a real country.
 
-You can also change the user and password, in that case make sure to match the ones mentioned in `docker-compose.yml`, under the `spring` service.
+You can also change the user and password, in that case make sure to match the ones mentioned in [.env](.env) file, under the `corda`.
 
 ### GraphDB
 
-The Corda node communicates with an instance of GraphDB. In the default configuration it is assumed that GraphDB and the Corda node are running in the same network (in this case the virtual one created by docker). Should that not be the case, you can configure GraphDB's location by editing `database.properties`.
+The Corda node communicates with an instance of GraphDB. In the default configuration it is assumed that GraphDB and the Corda node are running in the same network (in this case the virtual one created by docker). 
+Should this not be the case, you can configure GraphDB's location by editing [.env](.env) file, and alter the `triplestoreHost` property.
 
 ## Registration to the Network
 
@@ -32,10 +34,7 @@ After configuring your node identity, you can register your node:
 docker compose --profile registration up
 ```
 
-Once the process ends successfully, the node is registered to the network and new certificates are created.
-
-After starting your node, you can see the network-map service at:  
-https://nms.k8s.basicdatasharinginfrastructure.net/
+Once the process ends successfully, the node is registered to the network and new certificates are created. After starting your node, you can see the network-map service at: https://nms.k8s.basicdatasharinginfrastructure.net/
 
 ## Run the Corda migration database
 
@@ -45,20 +44,22 @@ docker compose --profile db up
 
 ## Run the BDI Node
 
+Run the BDI node using the following docker compose command:
+
 ```
 docker compose --profile run up
 ```
 
-Once all the three components are up and running you need to set up the GraphDB repository.
+This will start the BDI-API, Corda node and GraphDB containers.
 
 ## Sample Call
 
 Open http://localhost:10050/swagger-ui.html in your browser. A swagger UI should appear.
 Under Corda details, one can query the Corda node what nodes it knows. It should know at least one notary (GET `/node/notaries`) and a few other nodes (GET `/node/peers`).
 
-Play around with the `/events` calls too. In case you are prompted for an access token, you can use your iShare instance – make sure you configured it under `database.properties`, together with GraphDB, in case – or enter `Bearer doitanyway` to skip this.
+Play around with the `/events` calls too. 
 
-Try to submit the following new and randomly event at the `/events/` endpoint.
+Try to submit the following new and randomly event at the `/events` endpoint.
 
 ```
 @base <http://example.com/base/> . 
@@ -107,9 +108,9 @@ Try to submit the following new and randomly event at the `/events/` endpoint.
 
 You can also send these events to other nodes, by mentioning in the endpoint `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` the organization, locality and country of the node you want to send the events to.
 
-If you want to randomly generate events yourself to input to `/events/` then use the `/events/random` endpoint, mentioning `false` for start-flow and the desired number of events
+If you want to randomly generate events yourself to input to `/events` then use the `/events/random` endpoint, mentioning `false` for start-flow and the desired number of events
 
 Alternatively, you can run the curl command below to generate random events (replace the number-events value with the desired number of events to be generated):
 ```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' --header 'Authorization: Bearer doitanyway' 'http://localhost:10050/events/random?start-flow=false&number-events=1'
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'http://localhost:10050/events/random?start-flow=false&number-events=1'
 ```

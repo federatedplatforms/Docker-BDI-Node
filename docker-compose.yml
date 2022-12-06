@@ -1,12 +1,15 @@
 version: '3.9'
+
 services:
   corda-registration:
     environment:
       CORDA_ARGS: --initial-registration --network-root-truststore /tmp/network-truststore.jks --network-root-truststore-password trustpass
+    env_file:
+      - .env
     volumes:
-      - './certificates:/opt/corda/certificates'
-      - './node.conf:/etc/corda/node.conf'
-      - './network-truststore.jks:/tmp/network-truststore.jks'
+      - './corda/certificates:/opt/corda/certificates'
+      - './corda/node.conf:/etc/corda/node.conf'
+      - './corda/network-truststore.jks:/tmp/network-truststore.jks'
     ports:
       - '10006:10006'
       - '10005:10005'
@@ -21,11 +24,13 @@ services:
   corda-database-migration:
     environment:
       CORDA_ARGS: run-migration-scripts --core-schemas --allow-hibernate-to-manage-app-schema --config-file=/etc/corda/node.conf
+    env_file:
+      - .env
     volumes:
-      - './certificates:/opt/corda/certificates'
-      - './node.conf:/etc/corda/node.conf'
-      - './network-truststore.jks:/tmp/network-truststore.jks'
-      - './cordapps:/opt/corda/cordapps'
+      - './corda/certificates:/opt/corda/certificates'
+      - './corda/node.conf:/etc/corda/node.conf'
+      - './corda/network-truststore.jks:/tmp/network-truststore.jks'
+      - './corda/cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
     ports:
       - '10006:10006'
@@ -39,16 +44,16 @@ services:
       - BDI-node-net
 
   corda:
-    environment:
-      triplestore.host: "graphdb"
+    env_file:
+      - .env
     volumes:
-      - './certificates:/opt/corda/certificates'
-      - './node.conf:/etc/corda/node.conf'
-      - './network-truststore.jks:/tmp/network-truststore.jks'
-      - './cordapps:/opt/corda/cordapps'
+      - './corda/certificates:/opt/corda/certificates'
+      - './corda/node.conf:/etc/corda/node.conf'
+      - './corda/network-truststore.jks:/tmp/network-truststore.jks'
+      - './corda/cordapps:/opt/corda/cordapps'
+      - './corda/database.properties:/opt/corda/database.properties'
+      - './corda/ishare.properties:/opt/corda/ishare.properties'
       - './persistence:/opt/corda/persistence'
-      - './database.properties:/opt/corda/database.properties'
-      - './ishare.properties:/opt/corda/ishare.properties'
     ports:
       - '10006:10006'
       - '10005:10005'
@@ -60,20 +65,16 @@ services:
     networks:
       - BDI-node-net
 
-  spring:
-    environment:
-      cordaHost: "corda"
-      cordaPort: 10006
-      cordaUser: "user1"
-      cordaPassword: "vzzuABeCut3jGoJfEp94"
-      springPort: 10050
+  bdi-api:
+    env_file:
+      - .env
     ports:
       - '10050:10050'
     depends_on:
       - corda
     image: 'chirvasutatc/bdi-api:0.1'
     container_name: bdi-api
-    command: /bin/bash -c "java -Dserver.port=$$springPort -Dconfig.rpc.host=$$cordaHost -Dconfig.rpc.port=$$cordaPort -Dconfig.rpc.username=$$cordaUser -Dconfig.rpc.password=$$cordaPassword -jar api.jar"
+    command: /bin/bash -c "java -Dserver.port=${bdiApiServerPort} -Dconfig.rpc.host=${cordaHost} -Dconfig.rpc.port=${cordaPort} -Dconfig.rpc.username=${cordaUser} -Dconfig.rpc.password=${cordaPassword} -jar api.jar"
     profiles:
       - run
     networks:
