@@ -36,12 +36,6 @@ docker compose --profile registration up
 
 Once the process ends successfully, the node is registered to the network and new certificates are created. After starting your node, you can see the network-map service at: https://nms.k8s.basicdatasharinginfrastructure.net/
 
-## Run the Corda migration database
-
-```
-docker compose --profile db up
-```
-
 ## Run the BDI Node
 
 Run the BDI node using the following docker compose command:
@@ -50,7 +44,7 @@ Run the BDI node using the following docker compose command:
 docker compose --profile run up
 ```
 
-This will start the BDI-API, Corda node and GraphDB containers.
+This will start the BDI-API, Corda node and GraphDB containers. Startup might take some time, so be patient.
 
 ## Sample Call
 
@@ -113,4 +107,13 @@ If you want to randomly generate events yourself to input to `/events` then use 
 Alternatively, you can run the curl command below to generate random events (replace the number-events value with the desired number of events to be generated):
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'http://localhost:10050/events/random?start-flow=false&number-events=1'
+```
+
+
+## Run the Corda migration database (optional)
+
+In case you want to rebuild the corda datastore, run the command below. Make sure to stop the corda bdi node first:
+
+```
+docker compose --profile db up
 ```

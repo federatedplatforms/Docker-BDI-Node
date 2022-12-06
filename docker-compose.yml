@@ -31,7 +31,7 @@ services:
       - './corda/node.conf:/etc/corda/node.conf'
       - './corda/network-truststore.jks:/tmp/network-truststore.jks'
       - './corda/cordapps:/opt/corda/cordapps'
-      - './persistence:/opt/corda/persistence'
+      - './corda/persistence-4.9.2-ce:/opt/corda/persistence'
     ports:
       - '10006:10006'
       - '10005:10005'
@@ -53,7 +53,7 @@ services:
       - './corda/cordapps:/opt/corda/cordapps'
       - './corda/database.properties:/opt/corda/database.properties'
       - './corda/ishare.properties:/opt/corda/ishare.properties'
-      - './persistence:/opt/corda/persistence'
+      - './corda/persistence-4.9.2-ce:/opt/corda/persistence'
     ports:
       - '10006:10006'
       - '10005:10005'
