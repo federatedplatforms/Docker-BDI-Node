@@ -42,13 +42,14 @@ services:
 
   corda:
     environment:
-      triplestoreHost: "graphdb"
+      triplestore.host: "graphdb"
     volumes:
       - './certificates:/opt/corda/certificates'
       - './node.conf:/etc/corda/node.conf'
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
+      - './database.properties:/opt/corda/database.properties'
       - './ishare.properties:/opt/corda/ishare.properties'
     ports:
       - '10006:10006'

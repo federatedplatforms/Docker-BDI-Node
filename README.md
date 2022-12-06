@@ -36,7 +36,7 @@ Once the process ends successfully, the node is registered to the network and ne
 After starting your node, you can see the network-map service at:  
 https://nms.k8s.basicdatasharinginfrastructure.net/
 
-## Run the Corda DB
+## Run the Corda migration database
 
 ```
 docker compose --profile db up
@@ -49,23 +49,6 @@ docker compose --profile run up
 ```
 
 Once all the three components are up and running you need to set up the GraphDB repository.
-
-### Set up GraphDB
-
-You can load the ontologies by running the following commands:
-
-1. Navigate to http://\<server>:7200
-2. Setup -> Repositories -> Create new repository -> GraphDB Repository
-3. Provide a name, put this name in database.properties. The default is bdi.
-4. Tick the box to "Enable SHACL validation"
-5. Create
-6. (Optional) click the thumb-tack icon to set the new repository as the default and run it
-7. Download a zip file with the ontology from [here](https://nightly.link/Federated-BDI/FEDeRATED-Semantic-Model/workflows/CreateArchive/master/federated-ontologies)
-8. Upload RDF files -> Select the ontology zip
-9. Download the zip file for the SHACL from [here](https://nightly.link/Federated-BDI/FEDeRATED-Semantic-Model/workflows/shaclArchive/master/federated-shacl).
-10. Upload RDF files -> Select the shacl zip. Select from target graph: **named graph** and provide in the text below: `http://rdf4j.org/schema/rdf4j#SHACLShapeGraph`
-
-Step 4, 9 and 10 are optional, to make use of the SHACL validation to make sure added data fits the restraints specified.
 
 ## Sample Call
 
