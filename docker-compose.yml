@@ -18,7 +18,6 @@ services:
     networks:
       - BDI-node-net
 
-
   corda-database-migration:
     environment:
       CORDA_ARGS: run-migration-scripts --core-schemas --allow-hibernate-to-manage-app-schema --config-file=/etc/corda/node.conf
@@ -28,7 +27,6 @@ services:
       - './network-truststore.jks:/tmp/network-truststore.jks'
       - './cordapps:/opt/corda/cordapps'
       - './persistence:/opt/corda/persistence'
-      - './database.properties:/opt/corda/database.properties'
     ports:
       - '10006:10006'
       - '10005:10005'
@@ -84,7 +82,7 @@ services:
 
   graphdb:
     volumes:
-      - './graphdb-data:/opt/graphdb/data'
+      - './graphdb/repositories:/repository.init'
     ports:
       - '7200:7200'
     image: 'khaller/graphdb-free:10.0.0'

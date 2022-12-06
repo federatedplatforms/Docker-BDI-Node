@@ -3,16 +3,17 @@
 This repository contains the necessary files to configure a BDI node and run it via docker compose.
 
 ## Configuration
+
 The BDI node is composed by the following components:
   
   - Corda node
-  - Spring-Boot API
-  - GraphDB database
+  - API
   - Semantic adapter
+  - GraphDB
 
 ### Node Identity
 
-You can configure the identity of the Corda node through the `node.conf` file. You can change the name and location of the organization and you must set the host name or IP address of the node. 
+You can configure the identity of the Corda node through the `node.conf` file. You can change the name and location of the organization, and you must set the host name or IP address of the node. 
 Note that for testing purposes, it is useful to pick a unique country code. The country code does not have to correspond to a real country.
 
 You can also change the user and password, in that case make sure to match the ones mentioned in `docker-compose.yml`, under the `spring` service.
@@ -23,7 +24,7 @@ The Corda node communicates with an instance of GraphDB. In the default configur
 
 ## Registration to the Network
 
-> **Important**: you don't need to run this step if the node is already registered to the network - for instance, if you already registered it and now you are restarting the node.
+> **Important**: you don't need to run this step if the node is already registered to the network - for instance, if you already registered it, and now you are restarting the node.
 
 After configuring your node identity, you can register your node:
 
