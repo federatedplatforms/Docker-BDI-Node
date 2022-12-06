@@ -10,19 +10,17 @@ The BDI node is composed by the following components:
   - BDI API (includes the semantic adapter)
   - GraphDB
 
-All the container properties are specified in the docker compose [.env](.env) file.
+All the container properties are specified in the [corda/](corda/) folder, see database.properties and ishare.properties. 
 
 ### Node Identity
 
 You can configure the identity of the Corda node through the [node.conf](corda/node.conf) file. You can change the name and location of the organization, and you must set the host name or IP address of the node. 
 Note that for testing purposes, it is useful to pick a unique country code. The country code does not have to correspond to a real country.
 
-You can also change the user and password, in that case make sure to match the ones mentioned in [.env](.env) file, under the `corda`.
-
 ### GraphDB
 
 The Corda node communicates with an instance of GraphDB. In the default configuration it is assumed that GraphDB and the Corda node are running in the same network (in this case the virtual one created by docker). 
-Should this not be the case, you can configure GraphDB's location by editing [.env](.env) file, and alter the `triplestoreHost` property.
+Should this not be the case, you can configure GraphDB's location by editing [corda/database.properties](corda/database.properties) folder, and alter the `triplestore.host` property.
 
 ## Registration to the Network
 
