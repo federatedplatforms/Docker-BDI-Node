@@ -13,23 +13,33 @@ The BDI node is composed by the following components:
 ```mermaid
 graph TD
     API(BDI API) --> SEM(Semantic Adapter)
-    API(BDI API) -- TLS/AMQP --> CORDA(Corda Node)
+    API(BDI API) -- (TLS/)AMQP --> CORDA(Corda Node)
     CORDA --> GRAPHDB(GraphDB)
     CORDA -- TLS/HTTPS --> ISHARE(iSHARE)
 ```
 
 ## Configuration
 
-Overview of the configuration files:
+Overview of the BDI node configuration files:
 
 | File                                                   | Description                                                              |
-|--------------------------------------------------------|--------------------------------------------------------------------------| 
+|--------------------------------------------------------|--------------------------------------------------------------------------|
 | [corda/database.properties](corda/database.properties) | Triple store connection properties                                       | 
 | [corda/ishare.properties](corda/ishare.properties)     | iSHARE configuration properties                                          |
 | [corda/node.conf](corda/node.conf)                     | Corda node.conf configuration file                                       |
 | [.env](.env)                                           | Docker compose env properties, contains BDI API configuration properties | 
 
-Make sure to restart the docker containers after changing the properties.
+
+> **Important**: Make sure to restart the docker containers after changing any of the properties.
+
+For more details regarding the off-the-shelf components that have been used, please refer to the corresponding documentation:
+
+| Component                  | Link                                                                   |
+|----------------------------|------------------------------------------------------------------------|
+| Corda R3 community edition | https://docs.r3.com/en/platform/corda/4.9/community.html               |
+| GraphDB free               | https://graphdb.ontotext.com/documentation/10.1/                       |
+| Spring Boot                | https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/  |
+
 
 ### Node Identity
 
