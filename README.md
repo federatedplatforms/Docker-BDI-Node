@@ -78,14 +78,19 @@ docker compose --profile run up
 
 This will start the BDI-API, Corda node and GraphDB containers. Startup might take some time, so be patient.
 
-## Sample Call
+## Testing the BDI API
 
-Open http://localhost:10050/swagger-ui.html in your browser. A swagger UI should appear.
+The BDI API provides a Swagger interface that allows for interacting with the BDI API. 
+After the docker containers are up and running navigate to http://localhost:10050/swagger-ui.html in your browser, the Swagger UI should appear.
+
+### Corda endpoints
+
 Under Corda details, one can query the Corda node what nodes it knows. It should know at least one notary (GET `/node/notaries`) and a few other nodes (GET `/node/peers`).
 
-Play around with the `/events` calls too. 
+### Events endpoints
 
-Try to submit the following new and randomly event at the `/events` endpoint.
+The `/events` endpoint allows for sending events to the BDI node. Below is an example event that 
+can be submitted to the `/events` endpoint:
 
 ```
 @base <http://example.com/base/> . 
@@ -132,7 +137,11 @@ Try to submit the following new and randomly event at the `/events` endpoint.
           Event:hasSubmissionTimestamp "2021-08-23T19:12:55Z"^^xsd:dateTime .
 ```
 
-You can also send these events to other nodes, by mentioning in the endpoint `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` the organization, locality and country of the node you want to send the events to.
+### Routing message to other BDI nodes
+
+In order to send events to specific BDI nodes the receiver can be specified on the endpoint `/events` endpoint: `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` the organization, locality and country of the node you want to send the events to.
+
+### Generating random events
 
 If you want to randomly generate events yourself to input to `/events` then use the `/events/random` endpoint, mentioning `false` for start-flow and the desired number of events
 
@@ -140,7 +149,6 @@ Alternatively, you can run the curl command below to generate random events (rep
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'http://localhost:10050/events/random?start-flow=false&number-events=1'
 ```
-
 
 ## Run the Corda migration database (optional)
 
