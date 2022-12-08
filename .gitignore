@@ -1,5 +1,3 @@
 .idea
-
-certificates/*
-
-graphdb-data
+corda/certificates/*.jks
+corda/persistence*/*.trace.db
