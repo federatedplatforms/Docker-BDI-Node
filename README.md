@@ -13,10 +13,12 @@ The BDI node is composed by the following components:
 ```mermaid
 graph TD
     API(BDI API) --> SEM(Semantic Adapter)
-    API(BDI API) -- (TLS/)AMQP --> CORDA(Corda Node)
+    API(BDI API) -- CordaRPC/AMQP --> CORDA(Corda Node)
     CORDA --> GRAPHDB(GraphDB)
     CORDA -- TLS/HTTPS --> ISHARE(iSHARE)
 ```
+
+> **Note**: TLS can be enabled for the CordaRPC connection.
 
 ## Configuration
 
