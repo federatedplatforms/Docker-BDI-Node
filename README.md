@@ -2,7 +2,7 @@
 
 This repository contains the necessary files to configure a BDI node and run it via docker compose.
 
-## Configuration
+## Components
 
 The BDI node is composed by the following components:
   
@@ -10,7 +10,26 @@ The BDI node is composed by the following components:
   - BDI API (includes the semantic adapter)
   - GraphDB
 
-All the container properties are specified in the [corda/](corda/) folder, see database.properties and ishare.properties. 
+```mermaid
+graph TD
+    API(BDI API) --> SEM(Semantic Adapter)
+    API(BDI API) -- TLS/AMQP --> CORDA(Corda Node)
+    CORDA --> GRAPHDB(GraphDB)
+    CORDA -- TLS/HTTPS --> ISHARE(iSHARE)
+```
+
+## Configuration
+
+Overview of the configuration files:
+
+| File                                                   | Description                                                              |
+|--------------------------------------------------------|--------------------------------------------------------------------------| 
+| [corda/database.properties](corda/database.properties) | Triple store connection properties                                       | 
+| [corda/ishare.properties](corda/ishare.properties)     | iSHARE configuration properties                                          |
+| [corda/node.conf](corda/node.conf)                     | Corda node.conf configuration file                                       |
+| [.env](.env)                                           | Docker compose env properties, contains BDI API configuration properties | 
+
+Make sure to restart the docker containers after changing the properties.
 
 ### Node Identity
 
