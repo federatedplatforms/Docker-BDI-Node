@@ -34,7 +34,6 @@ Make sure to restart the docker containers after changing the properties.
 ### Node Identity
 
 You can configure the identity of the Corda node through the [node.conf](corda/node.conf) file. You can change the name and location of the organization, and you must set the host name or IP address of the node. 
-Note that for testing purposes, it is useful to pick a unique country code. The country code does not have to correspond to a real country.
 
 ### GraphDB
 
