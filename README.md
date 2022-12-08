@@ -137,9 +137,10 @@ can be submitted to the `/events` endpoint:
           Event:hasSubmissionTimestamp "2021-08-23T19:12:55Z"^^xsd:dateTime .
 ```
 
-### Routing message to other BDI nodes
+### Sending message to other BDI nodes
 
-In order to send events to specific BDI nodes the receiver can be specified on the endpoint `/events` endpoint: `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` the organization, locality and country of the node you want to send the events to.
+In order to send events to specific BDI nodes the receiver can be specified on the endpoint `/events` endpoint. The endpoint accepts 3 path parameter: `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` 
+the organization, locality and country. The provided values should match CordaX500Name of the node you want to send the events to. 
 
 ### Generating random events
 
