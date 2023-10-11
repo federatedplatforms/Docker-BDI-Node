@@ -6,15 +6,15 @@ This repository contains the necessary files to configure a BDI node and run it 
 
 The BDI node is composed by the following components:
 
-- BDI API
-- Corda Node
+- API
+- Corda
 - GraphDB
 
 ```mermaid
 graph TD
-    subgraph Node A
-    API(BDI API) --> GraphDB
-    API(BDI API) -- CordaRPC/AMQP --> CORDA(Corda Node)
+    subgraph BDI Node
+    API --> GraphDB
+    API -- CordaRPC/AMQP --> CORDA(Corda)
     CORDA --> GraphDB
     end
     CORDA -- TLS/HTTPS --> ISHARE(iSHARE)
