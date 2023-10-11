@@ -5,16 +5,18 @@ This repository contains the necessary files to configure a BDI node and run it 
 ## Components
 
 The BDI node is composed by the following components:
-  
-  - Corda node
-  - BDI API (includes the semantic adapter)
-  - GraphDB
+
+- BDI API
+- Corda Node
+- GraphDB
 
 ```mermaid
 graph TD
-    API(BDI API) --> SEM(Semantic Adapter)
+    subgraph Node A
+    API(BDI API) --> GraphDB
     API(BDI API) -- CordaRPC/AMQP --> CORDA(Corda Node)
-    CORDA --> GRAPHDB(GraphDB)
+    CORDA --> GraphDB
+    end
     CORDA -- TLS/HTTPS --> ISHARE(iSHARE)
 ```
 
@@ -92,63 +94,67 @@ Under Corda details, one can query the Corda node what nodes it knows. It should
 The `/events` endpoint allows for sending events to the BDI node. Below is an example event that 
 can be submitted to the `/events` endpoint:
 
-```
-@base <http://example.com/base/> . 
-@base <http://example.com/base/> . 
-@prefix owl: <http://www.w3.org/2002/07/owl#> . 
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix data: <http://example.com/base#> .
-@prefix ex: <http://example.com/base#> . 
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix time: <http://www.w3.org/2006/time#> . 
-@prefix data: <http://example.com/base#> .
-@prefix ex: <http://example.com/base#> . 
-@prefix Event: <https://ontology.tno.nl/logistics/federated/Event#> . 
-@prefix pi: <https://ontology.tno.nl/logistics/federated/PhysicalInfrastructure#> .
-@prefix businessService: <https://ontology.tno.nl/logistics/federated/BusinessService#> .
-@prefix dt: <https://ontology.tno.nl/logistics/federated/DigitalTwin#> .
-@prefix classifications: <https://ontology.tno.nl/logistics/federated/Classifications#> .
-
-        ex:LegalPerson-Mgeuwp a businessService:LegalPerson, owl:NamedIndividual, businessService:PrivateEnterprise;
-          businessService:actorName "Mgeuwp" .
-            
-        ex:Equipment-9d741476-088b-4b44-9665-da44fa1423fa a dt:Equipment, owl:NamedIndividual;
-          rdfs:label "TNO-test092022" .
-            
-        ex:businessTransaction-8c8b907f-b607-4bd4-9731-e2ee99de30da a businessService:Consignment, owl:NamedIndividual;
-          businessService:consignmentCreationTime "2022-01-01T00:01:00"^^xsd:dateTime;
-          businessService:involvedActor ex:LegalPerson-Mgeuwp .
-            
-        ex:PhysicalInfrastructure-QDFKJ a pi:Location, owl:NamedIndividual.
-         
-        ex:dt-19fc393f-c5d2-4d91-859c-418995a14b00 a dt:TransportMeans, owl:NamedIndividual, dt:Vessel;
-          rdfs:label "Vessel";
-          dt:hasVIN "1118740";
-          dt:hasTransportMeansID "1118740" .
-             
-        ex:Event-65ed9fff-9848-4234-905b-764afd3f5904 a Event:Event, owl:NamedIndividual;
-          Event:hasTimestamp "2021-09-23T19:12:55Z"^^xsd:dateTime;
-          Event:hasDateTimeType Event:Estimated;
-          Event:involvesDigitalTwin ex:dt-19fc393f-c5d2-4d91-859c-418995a14b00, ex:Equipment-9d741476-088b-4b44-9665-da44fa1423fa;
-          Event:involvesBusinessTransaction ex:businessTransaction-8c8b907f-b607-4bd4-9731-e2ee99de30da;
-          Event:involvesPhysicalInfrastructure ex:PhysicalInfrastructure-QDFKJ;
-          Event:hasMilestone Event:Start;
-          Event:hasSubmissionTimestamp "2021-08-23T19:12:55Z"^^xsd:dateTime .
-```
-
-### Sending message to other BDI nodes
-
-In order to send events to specific BDI nodes the receiver can be specified on the endpoint `/events` endpoint. The endpoint accepts 3 path parameter: `/events/{destinationOrganisation}/{destinationLocality}/{destinationCountry}` 
-the organization, locality and country. The provided values should match CordaX500Name of the node you want to send the events to. 
-
-### Generating random events
-
-If you want to randomly generate events yourself to input to `/events` then use the `/events/random` endpoint, mentioning `false` for start-flow and the desired number of events
-
-Alternatively, you can run the curl command below to generate random events (replace the number-events value with the desired number of events to be generated):
-```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'http://localhost:10050/events/random?start-flow=false&number-events=1'
+```bash
+curl -X POST --location "http://localhost:10050/events" \
+    -H "Content-Type: application/json" \
+    -H "Event-Type: federated.events.arrival-event.v1" \
+    -d "{
+            \"timestamp\": \"2023-09-27T08:50:00.000+02:00\",
+            \"timeClassification\": \"Planned\",
+            \"involvedActors\": [
+                {
+                    \"actorLegalPerson\": {
+                        \"postalCode\": \"5656AE\",
+                        \"locatedAtStreetName\": \"High Tech Campus\",
+                        \"postalAddress\": \"HTC 25, 5656 AE Eindhoven\",
+                        \"locatedInCountry\": \"NL\",
+                        \"locatedInCity\": \"Eindhoven\",
+                        \"legalPersonName\": \"TNO\",
+                        \"legalPersonID\": \"TNO-NL\"
+                    },
+                    \"actorLogisticsRole\": \"Consignor\"
+                },
+                {
+                    \"actorLegalPerson\": {
+                        \"postalCode\": \"37137\",
+                        \"locatedAtStreetName\": \"Via Sommacampagna 32\",
+                        \"postalAddress\": \"Via Sommacampagna 32\",
+                        \"locatedInCountry\": \"IT\",
+                        \"locatedInCity\": \"Verona\",
+                        \"legalPersonName\": \"Verona Quadrante Europa TVR\",
+                        \"legalPersonID\": \"VQETVR-IT\"
+                    },
+                    \"actorLogisticsRole\": \"Consignee\"
+                },
+                {
+                    \"actorLegalPerson\": {
+                        \"postalCode\": \"8660\",
+                        \"locatedAtStreetName\": \"Godthåbsvej 19\",
+                        \"postalAddress\": \"Godthåbsvej 19\",
+                        \"locatedInCountry\": \"DK\",
+                        \"locatedInCity\": \"Skanderborg\",
+                        \"legalPersonName\": \"WAYS Logistics A/S\",
+                        \"legalPersonID\": \"WLAS-DK\"
+                    },
+                    \"actorLogisticsRole\": \"Carrier\"
+                }
+            ],
+            \"transportMeans\": [
+                {
+                    \"digitalTwinID\": \"X-040-TNO\",
+                    \"transportMeansMode\": \"Road\",
+                    \"hasTransportmeansNationality\": \"NL\"
+                }
+            ],
+            \"involvedLocation\": {
+                \"locationRole\": \"PlaceOfArrival\",
+                \"postalCode\": \"37137\",
+                \"locatedAtStreetName\": \"Via Sommacampagna 32\",
+                \"postalAddress\": \"Via Sommacampagna 32\",
+                \"locatedInCountry\": \"IT\",
+                \"locatedInCity\": \"Verona\"
+            }
+        }"
 ```
 
 ## Run the Corda migration database (optional)
