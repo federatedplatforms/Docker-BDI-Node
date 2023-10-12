@@ -74,7 +74,7 @@ services:
       - corda
     image: 'federatedbdi/bdi-api:0.3.7'
     container_name: bdi-api
-    command: /bin/bash -c "java java -Dserver.port=${springPort} -Dcorda.rpc.host=${cordaHost} -Dcorda.rpc.port=${cordaPort} -Dcorda.rpc.username=${cordaUser} -Dcorda.rpc.password=${cordaPassword} -Dgraphdb.sparql.url=${graphdbSparqlUrl} -Dbdi.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dbdi.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
+    command: /bin/bash -c "java -Dserver.port=${springPort} -Dcorda.rpc.host=${cordaHost} -Dcorda.rpc.port=${cordaPort} -Dcorda.rpc.username=${cordaUser} -Dcorda.rpc.password=${cordaPassword} -Dgraphdb.sparql.url=${graphdbSparqlUrl} -Dbdi.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dbdi.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
     profiles:
       - run
     networks:
