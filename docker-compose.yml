@@ -68,13 +68,15 @@ services:
   bdi-api:
     env_file:
       - .env
+    volumes:
+      - './api:/opt/api'
     ports:
       - '10050:10050'
     depends_on:
       - corda
     image: 'federatedbdi/bdi-api:0.3.8'
     container_name: bdi-api
-    command: /bin/bash -c "java -Dserver.port=${springPort} -Dcorda.rpc.host=${cordaHost} -Dcorda.rpc.port=${cordaPort} -Dcorda.rpc.username=${cordaUser} -Dcorda.rpc.password=${cordaPassword} -Dgraphdb.sparql.url=${graphdbSparqlUrl} -Dbdi.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dbdi.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
+    command: /bin/bash -c "java -Dspring.config.additional-location=file:/opt/api/config/ -Dserver.port=${springPort} -Dcorda.rpc.host=${cordaHost} -Dcorda.rpc.port=${cordaPort} -Dcorda.rpc.username=${cordaUser} -Dcorda.rpc.password=${cordaPassword} -Dgraphdb.sparql.url=${graphdbSparqlUrl} -Dbdi.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dbdi.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
     profiles:
       - run
     networks:
