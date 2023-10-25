@@ -26,12 +26,13 @@ graph TD
 
 Overview of the BDI node configuration files:
 
-| File                                                   | Description                                                              |
-|--------------------------------------------------------|--------------------------------------------------------------------------|
-| [corda/database.properties](corda/database.properties) | Triple store connection properties                                       | 
-| [corda/ishare.properties](corda/ishare.properties)     | iSHARE configuration properties                                          |
-| [corda/node.conf](corda/node.conf)                     | Corda node.conf configuration file                                       |
-| [.env](.env)                                           | Docker compose env properties, contains BDI API configuration properties | 
+| File                                                                   | Description                                                             |
+|------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| [api/config/application.properties](api/config/application.properties) | Configuration of (custom) event types                                   |
+| [corda/database.properties](corda/database.properties)                 | Triple store connection properties                                      | 
+| [corda/ishare.properties](corda/ishare.properties)                     | iSHARE configuration properties                                         |
+| [corda/node.conf](corda/node.conf)                                     | Corda node.conf configuration file                                      |
+| [.env](.env)                                                           | Docker compose env properties, contains BDI API configuration properties | 
 
 
 > **Important**: Make sure to restart the docker containers after changing any of the properties.
@@ -44,6 +45,14 @@ For more details regarding the off-the-shelf components that have been used, ple
 | GraphDB free               | https://graphdb.ontotext.com/documentation/10.1/                       |
 | Spring Boot                | https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/  |
 
+
+### Configuring custom event types
+
+In the api/config/application.properties the supported event types are specified for the node. If one
+want to add additional event types, then this configuration needs to be adjusted. There is already
+an example provided: rml/custom.ttl and shacl/custom.ttl. SHACL validation is optional.
+
+Please refer to the documentation on how to configure events: https://github.com/Federated-BDI/FEDeRATED-BDI/blob/main/README.md#api-usage
 
 ### Node Identity
 
@@ -91,71 +100,19 @@ Under Corda details, one can query the Corda node what nodes it knows. It should
 
 ### Events endpoints
 
-The `/events` endpoint allows for sending events to the BDI node. Below is an example event that 
+The POST `/events` endpoint allows for sending events to the BDI node. Below is an example event that 
 can be submitted to the `/events` endpoint:
 
 ```bash
-curl -X POST --location "http://localhost:10050/events" \
-    -H "Content-Type: application/json" \
-    -H "Event-Type: federated.events.arrival-event.v1" \
-    -d "{
-            \"timestamp\": \"2023-09-27T08:50:00.000+02:00\",
-            \"timeClassification\": \"Planned\",
-            \"involvedActors\": [
-                {
-                    \"actorLegalPerson\": {
-                        \"postalCode\": \"5656AE\",
-                        \"locatedAtStreetName\": \"High Tech Campus\",
-                        \"postalAddress\": \"HTC 25, 5656 AE Eindhoven\",
-                        \"locatedInCountry\": \"NL\",
-                        \"locatedInCity\": \"Eindhoven\",
-                        \"legalPersonName\": \"TNO\",
-                        \"legalPersonID\": \"TNO-NL\"
-                    },
-                    \"actorLogisticsRole\": \"Consignor\"
-                },
-                {
-                    \"actorLegalPerson\": {
-                        \"postalCode\": \"37137\",
-                        \"locatedAtStreetName\": \"Via Sommacampagna 32\",
-                        \"postalAddress\": \"Via Sommacampagna 32\",
-                        \"locatedInCountry\": \"IT\",
-                        \"locatedInCity\": \"Verona\",
-                        \"legalPersonName\": \"Verona Quadrante Europa TVR\",
-                        \"legalPersonID\": \"VQETVR-IT\"
-                    },
-                    \"actorLogisticsRole\": \"Consignee\"
-                },
-                {
-                    \"actorLegalPerson\": {
-                        \"postalCode\": \"8660\",
-                        \"locatedAtStreetName\": \"Godthåbsvej 19\",
-                        \"postalAddress\": \"Godthåbsvej 19\",
-                        \"locatedInCountry\": \"DK\",
-                        \"locatedInCity\": \"Skanderborg\",
-                        \"legalPersonName\": \"WAYS Logistics A/S\",
-                        \"legalPersonID\": \"WLAS-DK\"
-                    },
-                    \"actorLogisticsRole\": \"Carrier\"
-                }
-            ],
-            \"transportMeans\": [
-                {
-                    \"digitalTwinID\": \"X-040-TNO\",
-                    \"transportMeansMode\": \"Road\",
-                    \"hasTransportmeansNationality\": \"NL\"
-                }
-            ],
-            \"involvedLocation\": {
-                \"locationRole\": \"PlaceOfArrival\",
-                \"postalCode\": \"37137\",
-                \"locatedAtStreetName\": \"Via Sommacampagna 32\",
-                \"postalAddress\": \"Via Sommacampagna 32\",
-                \"locatedInCountry\": \"IT\",
-                \"locatedInCity\": \"Verona\"
-            }
-        }"
+curl -X 'POST' \
+  'http://localhost:10050/events' \
+  -H 'accept: */*' \
+  -H 'Event-Type: federated.events.load-event.v1' \
+  -H 'Content-Type: application/json' \
+  -d '{ "event" : "data" }'
 ```
+
+For more information please refer to: https://github.com/Federated-BDI/FEDeRATED-BDI/blob/main/README.md 
 
 ## Run the Corda migration database (optional)
 
