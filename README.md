@@ -112,6 +112,8 @@ curl -X 'POST' \
   -d '{ "event" : "data" }'
 ```
 
+Example requests can be found at: https://github.com/Federated-BDI/FEDeRATED-BDI/tree/main/http/bdi-api
+
 For more information please refer to: https://github.com/Federated-BDI/FEDeRATED-BDI/blob/main/README.md 
 
 ## Run the Corda migration database (optional)
