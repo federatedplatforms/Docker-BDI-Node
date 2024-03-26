@@ -1,10 +1,10 @@
-# Docker BDI Node
+# Docker FEDeRATED Node
 
-This repository contains the necessary files to configure a BDI node and run it via docker compose.
+This repository contains the necessary files to configure a FEDeRATED Node and run it via docker compose.
 
 ## Components
 
-The BDI node is composed by the following components:
+The FEDeRATED Node is composed by the following components:
 
 - API
 - Corda
@@ -24,7 +24,7 @@ graph TD
 
 ## Configuration
 
-Overview of the BDI node configuration files:
+Overview of the FEDeRATED Node configuration files:
 
 | File                                                                   | Description                                                             |
 |------------------------------------------------------------------------|-------------------------------------------------------------------------|
@@ -79,19 +79,19 @@ docker compose --profile registration up
 
 Once the process ends successfully, the node is registered to the network and new certificates are created. After starting your node, you can see the network-map service at: https://nms.k8s.basicdatasharinginfrastructure.net/
 
-## Run the BDI Node
+## Run the FEDeRATED Node
 
-Run the BDI node using the following docker compose command:
+Run the FEDeRATED node using the following docker compose command:
 
 ```
 docker compose --profile run up
 ```
 
-This will start the BDI-API, Corda node and GraphDB containers. Startup might take some time, so be patient.
+This will start the FEDeRATED Node API, Corda node and GraphDB containers. Startup might take some time, so be patient.
 
-## Testing the BDI API
+## Testing the FEDeRATED Node API
 
-The BDI API provides a Swagger interface that allows for interacting with the BDI API. 
+The FEDeRATED Node API provides a Swagger interface that allows for interacting with the FEDeRATED Node API. 
 After the docker containers are up and running navigate to http://localhost:10050/swagger-ui.html in your browser, the Swagger UI should appear.
 
 ### Corda endpoints
@@ -100,12 +100,12 @@ Under Corda details, one can query the Corda node what nodes it knows. It should
 
 ### Events endpoints
 
-The POST `/events` endpoint allows for sending events to the BDI node. Below is an example event that 
+The POST `/events` endpoint allows for sending events to the FEDeRATED node. Below is an example event that 
 can be submitted to the `/events` endpoint:
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:10050/events' \
+  'http://localhost:10050/api/events' \
   -H 'accept: */*' \
   -H 'Event-Type: federated.events.load-event.v1' \
   -H 'Content-Type: application/json' \
@@ -118,7 +118,7 @@ For more information please refer to: https://github.com/Federated-BDI/FEDeRATED
 
 ## Run the Corda migration database (optional)
 
-In case you want to rebuild the corda datastore, run the command below. Make sure to stop the corda bdi node first:
+In case you want to rebuild the corda datastore, run the command below. Make sure to stop the FEDeRATED corda node first:
 
 ```
 docker compose --profile db up

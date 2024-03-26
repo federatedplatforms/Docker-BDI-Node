@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  corda-registration:
+  federated-corda-node-registration:
     environment:
       CORDA_ARGS: --initial-registration --network-root-truststore /tmp/network-truststore.jks --network-root-truststore-password trustpass
     env_file:
@@ -13,15 +13,15 @@ services:
     ports:
       - '10006:10006'
       - '10005:10005'
-    container_name: corda-BDI-node-registration
+    container_name: federated-corda-node-registration
     image: 'corda/community:4.9.2-zulu-openjdk8'
     user: root
     profiles:
       - registration
     networks:
-      - BDI-node-net
+      - federated-node-net
 
-  corda-database-migration:
+  federated-corda-node-database-migration:
     environment:
       CORDA_ARGS: run-migration-scripts --core-schemas --allow-hibernate-to-manage-app-schema --config-file=/etc/corda/node.conf
     env_file:
@@ -35,15 +35,15 @@ services:
     ports:
       - '10006:10006'
       - '10005:10005'
-    container_name: corda-BDI-node-migration
+    container_name: federated-corda-node-migration
     image: 'corda/community:4.9.2-zulu-openjdk8'
     user: root
     profiles:
       - db
     networks:
-      - BDI-node-net
+      - federated-node-net
 
-  corda:
+  federated-corda-node:
     env_file:
       - .env
     volumes:
@@ -57,33 +57,31 @@ services:
     ports:
       - '10006:10006'
       - '10005:10005'
-    container_name: corda-BDI-node
+    container_name: federated-corda-node
     image: 'corda/community:4.9.2-zulu-openjdk8'
     user: root
     profiles:
       - run
     networks:
-      - BDI-node-net
+      - federated-node-net
 
-  bdi-api:
+  federated-node-api:
     env_file:
       - .env
     volumes:
       - './api:/opt/api'
     ports:
       - '10050:10050'
-    depends_on:
-      - corda
-    image: 'federatedbdi/bdi-api:0.3.9'
-    container_name: bdi-api
-    command: /bin/bash -c "java -Dspring.config.additional-location=file:/opt/api/config/ -Dserver.port=${springPort} -Dcorda.rpc.host=${cordaHost} -Dcorda.rpc.port=${cordaPort} -Dcorda.rpc.username=${cordaUser} -Dcorda.rpc.password=${cordaPassword} -Dgraphdb.sparql.url=${graphdbSparqlUrl} -Dbdi.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dbdi.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
+    image: 'federatedbdi/federated-node-api:0.4.0'
+    container_name: federated-node-api
+    command: /bin/bash -c "java -Dspring.config.additional-location=file:/opt/api/config/ -Dserver.port=${springPort} -Dfederated.node.corda.rpc.host=${cordaHost} -Dfederated.node.corda.rpc.port=${cordaPort} -Dfederated.node.corda.rpc.username=${cordaUser} -Dfederated.node.corda.rpc.password=${cordaPassword} -Dfederated.node.graphdb.sparql.url=${graphdbSparqlUrl} -Dfederated.node.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dfederated.node.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
     profiles:
       - run
     networks:
-      - BDI-node-net
+      - federated-node-net
     restart: on-failure
 
-  graphdb:
+  federated-graphdb:
     volumes:
       - './graphdb/repositories:/repository.init'
     ports:
@@ -93,7 +91,7 @@ services:
     profiles:
       - run
     networks:
-      - BDI-node-net
+      - federated-node-net
 
 networks:
-  BDI-node-net: {}
+  federated-node-net: {}
