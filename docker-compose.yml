@@ -21,7 +21,7 @@ services:
     networks:
       - federated-node-net
 
-  federated-corda-node-database-migration:
+  federated-corda-node-migration:
     environment:
       CORDA_ARGS: run-migration-scripts --core-schemas --allow-hibernate-to-manage-app-schema --config-file=/etc/corda/node.conf
     env_file:
@@ -87,7 +87,7 @@ services:
     ports:
       - '7200:7200'
     image: 'khaller/graphdb-free:10.2.1'
-    container_name: graphdb
+    container_name: federated-graphdb
     profiles:
       - run
     networks:
