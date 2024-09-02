@@ -72,9 +72,9 @@ services:
       - './api:/opt/api'
     ports:
       - '10050:10050'
-    image: 'federatedbdi/federated-node-api:0.4.0'
+    image: 'federatedbdi/federated-node-api:0.4.3'
     container_name: federated-node-api
-    command: /bin/bash -c "java -Dspring.config.additional-location=file:/opt/api/config/ -Dserver.port=${springPort} -Dfederated.node.corda.rpc.host=${cordaHost} -Dfederated.node.corda.rpc.port=${cordaPort} -Dfederated.node.corda.rpc.username=${cordaUser} -Dfederated.node.corda.rpc.password=${cordaPassword} -Dfederated.node.graphdb.sparql.url=${graphdbSparqlUrl} -Dfederated.node.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dfederated.node.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
+    command: /bin/bash -c "java --add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED -Dspring.config.additional-location=file:/opt/api/config/ -Dserver.port=${springPort} -Dfederated.node.corda.rpc.host=${cordaHost} -Dfederated.node.corda.rpc.port=${cordaPort} -Dfederated.node.corda.rpc.username=${cordaUser} -Dfederated.node.corda.rpc.password=${cordaPassword} -Dfederated.node.graphdb.sparql.url=${graphdbSparqlUrl} -Dfederated.node.event.distribution.rules.list=${bdiEventDistributionRulesList} -Dfederated.node.event.distribution.rules.static.destinations=${bdiEventDistributionRulesStaticDestinations} -jar api.jar"
     profiles:
       - run
     networks:
